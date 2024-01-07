@@ -1,9 +1,9 @@
-struct Day1 {
-    pub val: u32
+pub struct Day1 {
+    pub val: u32,
 }
 
-impl Day1 {
 
+impl Day1 {
     pub fn numeric_counts(input: &Vec<String>) -> u32 {
         let mut val = 0;
         for line in input.iter() {
@@ -19,7 +19,6 @@ impl Day1 {
                     }
                 }
             }
-            println!("{}", line);
             if let None = last_num {
                 last_num = first_num
             }
@@ -35,34 +34,42 @@ impl Day1 {
             lines.push(line.to_string());
         }
         let val = Day1::numeric_counts(&lines);
-        Day1 {
-            val
-        }
+        Day1 { val }
     }
 
     pub fn part2() -> Day1 {
         let input = std::fs::read_to_string("./data/day1.txt").unwrap();
         let mut lines = vec![];
-        let words = vec!["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+        let words = vec![
+            "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+        ];
         for line in input.lines() {
-            let i = 0;
-            let mut word = "";
+            let mut i = 0;
+            let mut seq = String::new();
             while i < line.len() {
-                // TODO
+                let mut found = false;
+                for (j, w) in words.iter().enumerate() {
+                    if line[i..].starts_with(w) {
+                        seq.push_str((j + 1).to_string().as_str());
+                        found = true;
+                        break;
+                    }
+                }
+                if !found {
+                    seq.push(line.chars().nth(i).unwrap()); 
+                }
+                // words are legally allowed to overlap (twone, etc)
+                // always skip 1, so we catch these
+                i += 1;
             }
-            for c in 0..line.len() {
-               
-            }
-            lines.push(line.to_string());
+            lines.push(seq);
         }
         let val = Day1::numeric_counts(&lines);
-        Day1 {
-            val
-        }
+        Day1 { val }
     }
 }
 
-// test for day1 
+// test for day1
 #[cfg(test)]
 mod tests {
     use super::*;
